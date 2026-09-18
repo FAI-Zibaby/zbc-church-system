@@ -1,0 +1,312 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ member.first_name }} {{ member.last_name }} — Zion Baptist Church</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'css/zbc-style.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-dark navbar-zbc shadow-sm">
+        <div class="container">
+            <a href="{% url 'members:dashboard' %}" class="navbar-brand mb-0 h1 text-decoration-none">
+                <i class="bi bi-church"></i> Zion Baptist Church
+            </a>
+            <span class="text-white-50 small">
+                <a href="{% url 'members:member_list' %}" class="text-white-50 text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Back to Members
+                </a>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+
+        <!-- BREADCRUMB -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'members:dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'members:member_list' %}">Members</a></li>
+                <li class="breadcrumb-item active">{{ member.first_name }} {{ member.last_name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+
+            <!-- LEFT COLUMN: PHOTO + QUICK INFO -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        {% if member.photo %}
+                            <img src="{{ member.photo.url }}" alt="{{ member.first_name }}" class="profile-photo">
+                        {% else %}
+                            <div class="profile-photo-placeholder">
+                                {{ member.first_name|first|upper }}
+                            </div>
+                        {% endif %}
+
+                        <h3 class="mt-3 mb-1">{{ member.first_name }} {{ member.last_name }}</h3>
+                        <p class="text-muted mb-2">{{ member.member_id }}</p>
+
+                        {% if member.organ %}
+                            <span class="badge bg-primary mb-2">{{ member.get_organ_display }}</span>
+                        {% endif %}
+                        {% if member.is_baptized %}
+                            <span class="badge bg-success mb-2">Baptized</span>
+                        {% else %}
+                            <span class="badge bg-secondary mb-2">Not Baptized</span>
+                        {% endif %}
+                        {% if not member.is_active %}
+                            <span class="badge bg-danger mb-2">Inactive</span>
+                        {% endif %}
+
+                        <hr>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'members:member_card_pdf' member.id %}" target="_blank" class="btn btn-success">
+                                <i class="bi bi-file-earmark-pdf"></i> Print Member Card
+                            </a>
+                            <a href="/admin/members/member/{{ member.id }}/change/" class="btn btn-primary">
+                                <i class="bi bi-pencil-square"></i> Edit Member
+                            </a>
+                            <a href="/admin/members/member/{{ member.id }}/delete/" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete Member
+                            </a>
+                            {% if member.phone %}
+                                <a href="tel:{{ member.phone }}" class="btn btn-outline-success">
+                                    <i class="bi bi-telephone"></i> Call {{ member.phone }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: DETAILS -->
+            <div class="col-lg-8">
+
+                <!-- PERSONAL INFO -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="mb-0"><i class="bi bi-person-fill"></i> Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm detail-table">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%;">Full Name</th>
+                                    <td>{{ member.first_name }} {{ member.last_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Member ID</th>
+                                    <td><code>{{ member.member_id }}</code></td>
+                                </tr>
+                                <tr>
+                                    <th>Gender</th>
+                                    <td>{{ member.get_gender_display|default:"—" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date of Birth</th>
+                                    <td>
+                                        {{ member.date_of_birth|date:"F j, Y"|default:"—" }}
+                                        {% if member.age %}
+                                            <span class="text-muted">({{ member.age }} years)</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Marital Status</th>
+                                    <td>{{ member.get_marital_status_display|default:"—" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Occupation</th>
+                                    <td>{{ member.occupation|default:"—" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CONTACT INFO -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="mb-0"><i class="bi bi-telephone-fill"></i> Contact Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm detail-table">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%;">Phone</th>
+                                    <td>{{ member.phone|default:"—" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{ member.email|default:"—" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address</th>
+                                    <td>{{ member.address|default:"—" }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CHURCH INFO -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="mb-0"><i class="bi bi-building"></i> Church Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm detail-table">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%;">Organ / Fellowship</th>
+                                    <td>{{ member.get_organ_display|default:"—" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Joined Date</th>
+                                    <td>{{ member.joined_date|date:"F j, Y"|default:"—" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Baptized</th>
+                                    <td>
+                                        {% if member.is_baptized %}
+                                            <span class="badge bg-success">Yes</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">No</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- FAMILY -->
+                {% if family %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="mb-0"><i class="bi bi-people-fill"></i> Family</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm detail-table">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 40%;">Spouse</th>
+                                    <td>{{ family.spouse_name|default:"—" }}</td>
+                                </tr>
+                                {% if family.wedding_anniversary %}
+                                <tr>
+                                    <th>Wedding Anniversary</th>
+                                    <td>{{ family.wedding_anniversary|date:"F j, Y" }}</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                        {% if children %}
+                            <h6 class="mt-3">Children ({{ children|length }})</h6>
+                            <table class="table table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Age</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for child in children %}
+                                        <tr>
+                                            <td>{{ child.name }}</td>
+                                            <td>{{ child.get_gender_display|default:"—" }}</td>
+                                            <td>{{ child.age|default:"—" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="text-muted small mb-0 mt-2">No children recorded.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- TALENTS -->
+                {% if talents %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="mb-0"><i class="bi bi-star-fill"></i> Talents & Ministries</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Talent/Gift</th>
+                                    <th>Category</th>
+                                    <th>Level</th>
+                                    <th>Available</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for talent in talents %}
+                                    <tr>
+                                        <td>{{ talent.name }}</td>
+                                        <td>{{ talent.get_category_display }}</td>
+                                        <td>{{ talent.get_skill_level_display }}</td>
+                                        <td>
+                                            {% if talent.is_available_for_ministry %}
+                                                <span class="badge bg-success">Yes</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">No</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- PRAYER REQUESTS -->
+                {% if prayers %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white border-0 pt-3 pb-0">
+                        <h5 class="mb-0"><i class="bi bi-hand-thumbs-up-fill"></i> Recent Prayer Requests</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for prayer in prayers %}
+                                <li class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <strong>{{ prayer.get_status_display }}</strong>
+                                        <small class="text-muted">{{ prayer.date_submitted|date:"M j, Y" }}</small>
+                                    </div>
+                                    <p class="mb-0 text-muted small">{{ prayer.request }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="text-center zbc-footer py-4 mt-4">
+            <p class="mb-0">
+                Zion Baptist Church, Bonaberi — Douala, Cameroon
+            </p>
+        </footer>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+</body>
+</html>

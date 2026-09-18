@@ -1,0 +1,185 @@
+/* =========================================================
+   ZION BAPTIST CHURCH — CUSTOM STYLES
+   Colours: Green (primary), White (secondary), Blue (accent)
+   Text: Black for readability
+   ========================================================= */
+
+:root {
+    /* ZBC Brand Colours — adjust these hex codes to match your exact brand */
+    --zbc-green: #1B5E20;      /* Deep Baptist green */
+    --zbc-green-light: #2E7D32; /* Lighter green for hover states */
+    --zbc-blue: #1565C0;        /* Zion blue (this year's branding) */
+    --zbc-blue-dark: #0D47A1;   /* Darker blue for navbar */
+    --zbc-white: #FFFFFF;
+    --zbc-black: #1A1A1A;       /* Softer black for text */
+    --zbc-gray: #6C757D;        /* For muted text */
+    --zbc-light-bg: #F5F7FA;    /* Very light background */
+}
+
+/* === BASE STYLES === */
+body {
+    background-color: var(--zbc-light-bg);
+    color: var(--zbc-black);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* === NAVBAR (Blue — this year's branding) === */
+.navbar-zbc {
+    background-color: var(--zbc-blue-dark) !important;
+    border-bottom: 3px solid var(--zbc-green);
+}
+
+.navbar-zbc .navbar-brand {
+    color: var(--zbc-white) !important;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.navbar-zbc .navbar-text {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* === CARDS === */
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-title {
+    color: var(--zbc-black);
+    font-weight: 600;
+}
+
+/* === STAT CARDS (Consistent with brand colours) === */
+
+/* Members card — Blue (primary brand) */
+.stat-card-members {
+    background-color: var(--zbc-blue);
+    color: var(--zbc-white);
+}
+
+/* Prayer Requests card — Green (Baptist brand) */
+.stat-card-prayers {
+    background-color: var(--zbc-green);
+    color: var(--zbc-white);
+}
+
+/* Talents card — White with green border (light & clean) */
+.stat-card-talents {
+    background-color: var(--zbc-white);
+    color: var(--zbc-black);
+    border-left: 5px solid var(--zbc-green);
+}
+
+/* Birthdays card — White with blue border (light & clean) */
+.stat-card-birthdays {
+    background-color: var(--zbc-white);
+    color: var(--zbc-black);
+    border-left: 5px solid var(--zbc-blue);
+}
+
+/* Ensure all stat cards have consistent sizing */
+.stat-card-members,
+.stat-card-prayers,
+.stat-card-talents,
+.stat-card-birthdays {
+    height: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+}
+
+.stat-card-members:hover,
+.stat-card-prayers:hover,
+.stat-card-talents:hover,
+.stat-card-birthdays:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Small text in stat cards */
+.stat-card-members small,
+.stat-card-prayers small {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.stat-card-talents small,
+.stat-card-birthdays small {
+    color: var(--zbc-gray);
+}
+
+/* === BUTTONS === */
+.btn-primary {
+    background-color: var(--zbc-blue);
+    border-color: var(--zbc-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--zbc-blue-dark);
+    border-color: var(--zbc-blue-dark);
+}
+
+.btn-success {
+    background-color: var(--zbc-green);
+    border-color: var(--zbc-green);
+}
+
+.btn-success:hover {
+    background-color: var(--zbc-green-light);
+    border-color: var(--zbc-green-light);
+}
+
+/* === FOOTER === */
+.zbc-footer {
+    color: var(--zbc-gray);
+    font-size: 0.85rem;
+}
+
+/* === BADGES === */
+.badge-zbc-blue {
+    background-color: var(--zbc-blue);
+}
+
+.badge-zbc-green {
+    background-color: var(--zbc-green);
+}
+
+/* === TEXT UTILITIES === */
+.text-zbc-black {
+    color: var(--zbc-black) !important;
+}
+
+.text-zbc-gray {
+    color: var(--zbc-gray) !important;
+}
+/* === MEMBER CARDS (List page) === */
+.member-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+.member-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #1565C0;
+}
+
+.member-photo-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #1565C0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    font-weight: bold;
+    margin: 0 auto;
+    border: 4px solid #0D47A1;
+}
