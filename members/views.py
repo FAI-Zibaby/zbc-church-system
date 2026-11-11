@@ -39,6 +39,13 @@ def dashboard(request):
     # Talents
     total_talents = Talent.objects.count()
     available_talents = Talent.objects.filter(is_available_for_ministry=True).count()
+    active_members = Member.objects.filter(engagement_status='active').count()
+    warning_members = Member.objects.filter(engagement_status='warning').count()
+    sleeping_members = Member.objects.filter(engagement_status='sleeping').count()
+    dormant_members = Member.objects.filter(engagement_status='dormant').count()
+
+    follow_up_count = warning_members + sleeping_members + dormant_members
+
 
     context = {
         'today': today,
@@ -51,6 +58,11 @@ def dashboard(request):
         'recent_prayers': recent_prayers,
         'total_talents': total_talents,
         'available_talents': available_talents,
+        'active_members': active_members,
+        'warning_members': warning_members,
+        'sleeping_members': sleeping_members,
+        'dormant_members': dormant_members,
+        'follow_up_count': follow_up_count,
     }
     return render(request, 'dashboard.html', context)
 def members_pdf(request):
@@ -102,6 +114,12 @@ def members_pdf(request):
             m.occupation or '—',
             'Yes' if m.is_baptized else 'No',
         ])
+        # Engagement status counts
+    active_members = Member.objects.filter(engagement_status='active').count()
+    warning_members = Member.objects.filter(engagement_status='warning').count()
+    sleeping_members = Member.objects.filter(engagement_status='sleeping').count()
+    dormant_members = Member.objects.filter(engagement_status='dormant').count()
+    follow_up_count = warning_members + sleeping_members + dormant_members
 
     # Table styling
     table = Table(data, colWidths=[1*cm, 4.5*cm, 1.5*cm, 3*cm, 4*cm, 2*cm])
@@ -321,6 +339,7 @@ def member_list(request):
         'baptized_filter': baptized_filter,
         'organ_choices': Member.ORGAN_CHOICES,
         'gender_choices': Member.GENDER_CHOICES,
+    
     }
     return render(request, 'member_list.html', context)
 
@@ -558,3 +577,17 @@ def member_detail(request, member_id):
         'prayers': prayers,
     }
     return render(request, 'member_detail.html', context)
+
+def follow_up_list(request):
+    """Page for pastor/secretary to see members needing follow-up."""
+
+    # Get all members who need attention (warning, sleeping, dormant)
+    follow_up_members = Member.objects.filter(
+        engagement_status__in=['warning', 'sleeping', 'dormant']
+    ).order_by('engagement_status', 'last_name', 'first_name')
+
+    context = {
+        'members': follow_up_members,
+        'total_needing_follow_up': follow_up_members.count(),
+    }
+    return render(request, 'follow_up_list.html', context)

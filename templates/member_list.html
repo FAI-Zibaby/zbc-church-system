@@ -99,7 +99,7 @@
             <div class="row g-3">
                 {% for member in page_obj %}
                     <div class="col-md-4 col-lg-3">
-                        <div class="card h-100 shadow-sm border-0 member-card">
+                        <div class="card h-100 shadow-sm border-0 member-card {% if member.engagement_status == 'dormant' %}opacity-50{% endif %}">
                             <div class="text-center pt-3">
                                 {% if member.photo %}
                                     <img src="{{ member.photo.url }}" 
@@ -116,6 +116,13 @@
                                     {{ member.first_name }} {{ member.last_name }}
                                 </h6>
                                 <p class="text-muted small mb-1">{{ member.member_id }}</p>
+                                {% if member.engagement_status == 'dormant' %}
+                               <span class="badge bg-danger mb-1">Dormant</span>
+                               {% elif member.engagement_status == 'sleeping' %}
+                                <span class="badge bg-warning text-dark mb-1">Sleeping</span>
+                               {% elif member.engagement_status == 'warning' %}
+                               <span class="badge bg-info text-dark mb-1">Warning</span>
+                             {% endif %}
                                 {% if member.organ %}
                                     <span class="badge bg-primary">{{ member.get_organ_display }}</span>
                                 {% endif %}

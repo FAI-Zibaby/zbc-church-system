@@ -11,4 +11,5 @@ urlpatterns = [
     path('reports/members/', views.members_pdf, name='members_pdf'),
     path('reports/prayers/', views.prayer_requests_pdf, name='prayer_requests_pdf'),
     path('reports/birthdays/', views.birthdays_pdf, name='birthdays_pdf'),
+    path('follow-up/', views.follow_up_list, name='follow_up_list'),
 ]

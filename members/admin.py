@@ -26,6 +26,7 @@ class MemberAdmin(admin.ModelAdmin):
         'organ',
         'age_display',
         'phone',
+        'engagement_status',
         'is_active',
         
     )
@@ -52,7 +53,7 @@ class MemberAdmin(admin.ModelAdmin):
             '<em style="color: #999;">{}</em>',
             'No photo uploaded yet'
         )
-    list_filter = ('gender', 'organ', 'is_baptized', 'is_active', 'marital_status')
+    list_filter = ('gender', 'organ', 'is_baptized', 'is_active', 'marital_status','engagement_status')
     search_fields = ('member_id', 'first_name', 'last_name', 'phone', 'email')
     ordering = ('last_name', 'first_name')
     list_per_page = 25
@@ -72,7 +73,7 @@ class MemberAdmin(admin.ModelAdmin):
             'fields': ('phone', 'email', 'address', 'occupation')
         }),
         ('Church Information', {
-            'fields': ('organ', 'joined_date', 'is_baptized')
+            'fields': ('organ', 'joined_date', 'is_baptized', 'engagement_status')
         }),
         ('Pastoral Care', {
             'fields': ('prayer_needs', 'notes'),

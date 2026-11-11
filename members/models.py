@@ -75,7 +75,19 @@ class Member(models.Model):
         default=True,
         help_text="Uncheck to mark as inactive (soft delete)"
     )
-
+    # Engagement status (Phase 1 — manual tracking)
+    ENGAGEMENT_STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('warning', 'Warning (2-4 months inactive)'),
+        ('sleeping', 'Sleeping (4-6 months inactive)'),
+        ('dormant', 'Dormant (1 year+ inactive)'),
+    ]
+    engagement_status = models.CharField(
+        max_length=20,
+        choices=ENGAGEMENT_STATUS_CHOICES,
+        default='active',
+        help_text="Manually updated by church secretary based on attendance records."
+    )
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -273,3 +285,4 @@ class Talent(models.Model):
         ordering = ['member__last_name', 'name']
         verbose_name = "Talent"
         verbose_name_plural = "Talents"
+

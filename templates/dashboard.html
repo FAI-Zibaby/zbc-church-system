@@ -42,11 +42,12 @@
                 </div>
             </div>
         </div>
-
         <!-- STAT CARDS -->
         <div class="row g-3 mb-4">
+            
+            <!-- 1. MEMBERS CARD -->
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm text-bg-primary h-100">
+                <div class="card border-0 shadow-sm stat-card-members h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -60,8 +61,9 @@
                 </div>
             </div>
 
+            <!-- 2. PRAYER REQUESTS CARD -->
             <div class="col-md-3">
-          <div class="card border-0 shadow-sm stat-card-prayers h-100">
+                <div class="card border-0 shadow-sm stat-card-prayers h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -75,30 +77,35 @@
                 </div>
             </div>
 
+            <!-- 3. FOLLOW UP CARD (NEW) -->
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm stat-card-talents h-100">
-                    <div class="card-body">
-                        <a href="{% url 'members:member_list' %}" class="btn btn-primary me-2 mb-2">
-    <i class="bi bi-people-fill"></i> View All Members
-</a>
-    <a href="/admin/members/member/add/" class="btn btn-outline-primary me-2 mb-2">
-        <i class="bi bi-person-plus"></i> Add Member
-    </a>
-    <a href="/admin/members/prayerrequest/add/" class="btn btn-outline-warning me-2 mb-2">
-        <i class="bi bi-chat-heart"></i> Add Prayer Request
-    </a>
-    <a href="/admin/members/talent/add/" class="btn btn-outline-success me-2 mb-2">
-        <i class="bi bi-star"></i> Add Talent/Gift
-    </a>
-    <a href="/admin/" class="btn btn-outline-dark me-2 mb-2">
-        <i class="bi bi-gear"></i> Admin Panel
-    </a>
-</div>
+                <div class="card border-0 shadow-sm stat-card-birthdays h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="text-uppercase small mb-1">Follow Up</h6>
+                                <h2 class="mb-0">{{ follow_up_count }}</h2>
+                                <small>need attention</small>
+                            </div>
+                            <i class="bi bi-exclamation-triangle-fill" style="font-size: 2.5rem; opacity: 0.5;"></i>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <span class="badge bg-danger">{{ dormant_members }} dormant</span>
+                            <span class="badge bg-warning text-dark">{{ sleeping_members }} sleeping</span>
+                            <span class="badge bg-info text-dark">{{ warning_members }} warning</span>
+                            
+                            <a href="{% url 'members:follow_up_list' %}" class="btn btn-sm btn-primary w-100 mt-3">
+                                View Follow-Up List
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- 4. BIRTHDAYS CARD -->
             <div class="col-md-3">
-               <div class="card border-0 shadow-sm stat-card-birthdays h-100">
+                <div class="card border-0 shadow-sm stat-card-birthdays h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -111,61 +118,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- RECENT PRAYER REQUESTS + BIRTHDAYS -->
-        <div class="row g-3">
-            <div class="col-md-7">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white border-0 pt-3">
-                        <h5 class="mb-0"><i class="bi bi-hand-thumbs-up"></i> Recent Prayer Requests</h5>
-                    </div>
-                    <div class="card-body">
-                        {% if recent_prayers %}
-                            <ul class="list-group list-group-flush">
-                                {% for prayer in recent_prayers %}
-                                    <li class="list-group-item px-0">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <strong>{{ prayer.member }}</strong>
-                                            <small class="text-muted">{{ prayer.date_submitted|date:"M j" }}</small>
-                                        </div>
-                                        <p class="mb-1 text-muted small">{{ prayer.request|truncatechars:100 }}</p>
-                                        <span class="badge bg-secondary">{{ prayer.get_status_display }}</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p class="text-muted text-center py-4 mb-0">
-                                No active prayer requests right now.
-                            </p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-5">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white border-0 pt-3">
-                        <h5 class="mb-0"><i class="bi bi-balloon"></i> Birthdays This Month</h5>
-                    </div>
-                    <div class="card-body">
-                        {% if birthdays_this_month %}
-                            <ul class="list-group list-group-flush">
-                                {% for member in birthdays_this_month %}
-                                    <li class="list-group-item px-0 d-flex justify-content-between">
-                                        <span>{{ member.first_name }} {{ member.last_name }}</span>
-                                        <span class="badge bg-info">{{ member.date_of_birth|date:"M j" }}</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p class="text-muted text-center py-4 mb-0">
-                                No birthdays this month.
-                            </p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- QUICK ACTIONS -->
