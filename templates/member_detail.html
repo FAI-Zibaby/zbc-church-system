@@ -189,54 +189,67 @@
                 </div>
 
                 <!-- FAMILY -->
-                {% if family %}
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-header bg-white border-0 pt-3 pb-0">
-                        <h5 class="mb-0"><i class="bi bi-people-fill"></i> Family</h5>
+                                <!-- FAMILY -->
+                {% if member.marital_status == 'married' %}
+                <div class="card border-0 shadow-sm mb-3 family-card">
+                    <div class="card-header bg-white border-0 pt-3 pb-0 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-heart-fill text-danger"></i> Family Information</h5>
+                        
+                        <!-- If family exists, show edit button -->
+                        {% if family %}
+                            <a href="/admin/members/family/{{ family.id }}/change/" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm detail-table">
-                            <tbody>
-                                <tr>
-                                    <th style="width: 40%;">Spouse</th>
-                                    <td>{{ family.spouse_name|default:"—" }}</td>
-                                </tr>
-                                {% if family.wedding_anniversary %}
-                                <tr>
-                                    <th>Wedding Anniversary</th>
-                                    <td>{{ family.wedding_anniversary|date:"F j, Y" }}</td>
-                                </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-
-                        {% if children %}
-                            <h6 class="mt-3">Children ({{ children|length }})</h6>
-                            <table class="table table-sm">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Gender</th>
-                                        <th>Age</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for child in children %}
-                                        <tr>
-                                            <td>{{ child.name }}</td>
-                                            <td>{{ child.get_gender_display|default:"—" }}</td>
-                                            <td>{{ child.age|default:"—" }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        {% if family %}
+                            <div class="row">
+                                <!-- Spouse Column -->
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <div class="p-3 bg-light rounded">
+                                        <h6 class="text-muted text-uppercase small mb-2">Spouse</h6>
+                                        <h5 class="mb-0">{{ family.spouse_name|default:"Not recorded" }}</h5>
+                                        {% if family.wedding_anniversary %}
+                                            <small class="text-muted">Anniversary: {{ family.wedding_anniversary|date:"F j, Y" }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Children Column -->
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-light rounded">
+                                        <h6 class="text-muted text-uppercase small mb-2">Children ({{ children|length }})</h6>
+                                        {% if children %}
+                                            <ul class="list-unstyled mb-0">
+                                                {% for child in children %}
+                                                    <li class="mb-1">
+                                                        <i class="bi bi-person text-primary"></i> 
+                                                        {{ child.name }} 
+                                                        {% if child.age %}<span class="text-muted small">({{ child.age }} yrs)</span>{% endif %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p class="text-muted mb-0">No children recorded.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                         {% else %}
-                            <p class="text-muted small mb-0 mt-2">No children recorded.</p>
+                            <!-- If married but no family record exists yet -->
+                            <div class="text-center py-4">
+                                <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+                                <h6 class="mt-3">Family details not recorded yet.</h6>
+                                <p class="text-muted small">This member is married, but their spouse and children haven't been added to the system.</p>
+                                <a href="/admin/members/family/add/" class="btn btn-primary mt-2">
+                                    <i class="bi bi-plus-circle"></i> Add Family Details
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
                 {% endif %}
-
                 <!-- TALENTS -->
                 {% if talents %}
                 <div class="card border-0 shadow-sm mb-3">
